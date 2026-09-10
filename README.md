@@ -45,3 +45,9 @@ import { auditMiddleware, memoryMiddleware } from '@clicoh/logging';
 - `AWS_REGION`: optional region metadata.
 
 Errors are written to stderr. Other enabled levels are written to stdout.
+
+## Releases
+
+The first public version is published manually with npm 2FA. Subsequent semver
+tags publish through `.github/workflows/publish.yml` using npm trusted
+publishing (OIDC), without long-lived registry tokens.
