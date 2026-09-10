@@ -1,0 +1,70 @@
+{
+  "name": "@clicoh/logging",
+  "version": "1.0.0",
+  "description": "Structured JSON logging for ClicOH Node.js Express services",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "require": "./dist/index.js",
+      "default": "./dist/index.js"
+    },
+    "./logger": {
+      "types": "./dist/logger.d.ts",
+      "require": "./dist/logger.js",
+      "default": "./dist/logger.js"
+    },
+    "./log-data": {
+      "types": "./dist/log-data.d.ts",
+      "require": "./dist/log-data.js",
+      "default": "./dist/log-data.js"
+    },
+    "./audit": {
+      "types": "./dist/audit.d.ts",
+      "require": "./dist/audit.js",
+      "default": "./dist/audit.js"
+    },
+    "./memory": {
+      "types": "./dist/memory.d.ts",
+      "require": "./dist/memory.js",
+      "default": "./dist/memory.js"
+    }
+  },
+  "files": [
+    "dist",
+    "README.md"
+  ],
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "test": "bun run build && node --test tests/*.test.js",
+    "prepublishOnly": "bun run test"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "peerDependencies": {
+    "cls-rtracer": "^2.6.0",
+    "express": "^4.18.0 || ^5.0.0",
+    "winston": "^3.11.0"
+  },
+  "devDependencies": {
+    "@types/express": "^5.0.0",
+    "@types/node": "^22.10.0",
+    "cls-rtracer": "2.6.3",
+    "express": "^5.2.1",
+    "typescript": "^5.7.2",
+    "winston": "3.19.0"
+  },
+  "publishConfig": {
+    "registry": "https://registry.npmjs.org",
+    "access": "public"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/clicOH/logging-node.git"
+  },
+  "license": "UNLICENSED",
+  "private": false,
+  "packageManager": "bun@1.4.2"
+}
