@@ -266,13 +266,23 @@ const limitLogEvent = (value: unknown): unknown => {
 const sanitizeRequestPath = (path: string) => {
   const dynamicSegment =
     /^(?:\d+|[0-9a-f]{8}-[0-9a-f-]{27,}|[0-9a-f]{16,}|[^/]*@[^/]*)$/i;
+  const staticRouteSegment = /^[A-Za-z]+$/;
   const pathname = path.split('?')[0];
 
   return pathname
     .split('/')
-    .map((segment) =>
-      dynamicSegment.test(segment) || segment.length > 24 ? ':value' : segment,
-    )
+    .map((segment) => {
+      if (!segment) {
+        return segment;
+      }
+      if (dynamicSegment.test(segment)) {
+        return ':value';
+      }
+      if (segment.length > 24 && !staticRouteSegment.test(segment)) {
+        return ':value';
+      }
+      return segment;
+    })
     .join('/');
 };
 

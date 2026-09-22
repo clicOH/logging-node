@@ -38,7 +38,7 @@ import { auditMiddleware, memoryMiddleware } from '@clicoh/logging';
 - `SERVICE_NAME`: stable service name used in Loki.
 - `ENVIRONMENT` or `NODE_ENV`: deployment environment.
 - `LOG_LEVEL`: `error`, `warn`, `info`, or `debug`.
-- `LOG_HTTP_FULL`: includes sanitized request bodies and headers in audit logs.
+- `LOG_HTTP_FULL`: includes sanitized request headers in HTTP and audit logs. Request bodies are logged by the service after redacting sensitive fields. Path ids, UUIDs, emails, and tokens are masked; long alphabetic route names are kept.
 - `LOG_MEMORY_USAGE`: enables memory-delta logs.
 - `MAX_LOG_STRING_LENGTH`: maximum length for individual strings.
 - `MAX_LOG_EVENT_LENGTH`: maximum UTF-8 byte size for a complete JSON line.

@@ -129,6 +129,30 @@ test('removes query strings and masks dynamic request path segments', () => {
   );
 });
 
+test('keeps long alphabetic route names and still masks ids', () => {
+  assert.equal(
+    sanitizeRequestPath(
+      '/api/v2/troncales/listRoadmapByCenterDestination/12345',
+    ),
+    '/api/v2/troncales/listRoadmapByCenterDestination/:value',
+  );
+  assert.equal(
+    sanitizeRequestPath(
+      '/api/v2/troncales/listDeliveriesNotScannedSendTrunk/99',
+    ),
+    '/api/v2/troncales/listDeliveriesNotScannedSendTrunk/:value',
+  );
+});
+
+test('masks long non-alphabetic path segments', () => {
+  const token = `${'a'.repeat(20)}${'1'.repeat(10)}`;
+
+  assert.equal(
+    sanitizeRequestPath(`/api/v2/files/${token}`),
+    '/api/v2/files/:value',
+  );
+});
+
 test('preserves Error name, message, and stack', () => {
   const serialized = safeSerialize(new TypeError('Invalid shipment'));
 
