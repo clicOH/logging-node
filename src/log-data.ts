@@ -263,11 +263,13 @@ const limitLogEvent = (value: unknown): unknown => {
   return limited;
 };
 
+const stripQueryString = (path: string) => path.split('?')[0];
+
 const sanitizeRequestPath = (path: string) => {
   const dynamicSegment =
     /^(?:\d+|[0-9a-f]{8}-[0-9a-f-]{27,}|[0-9a-f]{16,}|[^/]*@[^/]*)$/i;
   const staticRouteSegment = /^[A-Za-z]+$/;
-  const pathname = path.split('?')[0];
+  const pathname = stripQueryString(path);
 
   return pathname
     .split('/')
@@ -286,6 +288,18 @@ const sanitizeRequestPath = (path: string) => {
     .join('/');
 };
 
+const getRequestPathFields = (
+  path: string,
+  maskPath = process.env.LOG_HTTP_MASK_PATH === 'true',
+) => {
+  const route = sanitizeRequestPath(path);
+
+  return {
+    url: maskPath ? route : stripQueryString(path),
+    route,
+  };
+};
+
 export {
   CIRCULAR_VALUE,
   DEFAULT_SENSITIVE_FIELDS,
@@ -294,10 +308,12 @@ export {
   cleanLogData,
   getMaxEventLength,
   getMaxStringLength,
+  getRequestPathFields,
   limitLogEvent,
   redactSensitiveData,
   sanitizeRequestPath,
   safeSerialize,
   safeStringify,
+  stripQueryString,
   truncateString,
 };

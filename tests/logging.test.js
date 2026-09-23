@@ -8,7 +8,11 @@ const {
   printGeneralLog,
   safeSerialize,
 } = require('../dist/logger');
-const { sanitizeRequestPath } = require('../dist/log-data');
+const {
+  getRequestPathFields,
+  sanitizeRequestPath,
+  stripQueryString,
+} = require('../dist/log-data');
 
 const projectRoot = path.resolve(__dirname, '..');
 
@@ -151,6 +155,47 @@ test('masks long non-alphabetic path segments', () => {
     sanitizeRequestPath(`/api/v2/files/${token}`),
     '/api/v2/files/:value',
   );
+});
+
+test('returns real and grouped request paths without query strings', () => {
+  const requestPath = '/api/v2/orders/123456/detail?token=secret';
+
+  assert.equal(
+    stripQueryString(requestPath),
+    '/api/v2/orders/123456/detail',
+  );
+  assert.deepEqual(getRequestPathFields(requestPath, false), {
+    url: '/api/v2/orders/123456/detail',
+    route: '/api/v2/orders/:value/detail',
+  });
+});
+
+test('masks the logged url when path masking is enabled', () => {
+  assert.deepEqual(
+    getRequestPathFields('/api/v2/orders/123456/detail?token=secret', true),
+    {
+      url: '/api/v2/orders/:value/detail',
+      route: '/api/v2/orders/:value/detail',
+    },
+  );
+});
+
+test('uses LOG_HTTP_MASK_PATH when no explicit option is provided', () => {
+  const previousValue = process.env.LOG_HTTP_MASK_PATH;
+  process.env.LOG_HTTP_MASK_PATH = 'true';
+
+  try {
+    assert.equal(
+      getRequestPathFields('/api/v2/orders/123456').url,
+      '/api/v2/orders/:value',
+    );
+  } finally {
+    if (previousValue === undefined) {
+      delete process.env.LOG_HTTP_MASK_PATH;
+    } else {
+      process.env.LOG_HTTP_MASK_PATH = previousValue;
+    }
+  }
 });
 
 test('preserves Error name, message, and stack', () => {

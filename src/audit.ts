@@ -1,6 +1,6 @@
 import express, { NextFunction, Request, Response } from 'express';
 
-import { sanitizeRequestPath } from './log-data';
+import { getRequestPathFields } from './log-data';
 import { printGeneralLog } from './logger';
 import logger from './logging';
 
@@ -43,6 +43,9 @@ auditMiddleware.use(
 
       if (process.env.NODE_ENV !== 'local') {
         const logHttpFull = process.env.LOG_HTTP_FULL === 'true';
+        const { url: action, route } = getRequestPathFields(
+          `${req.baseUrl}${req.path}`,
+        );
 
         printGeneralLog(
           {
@@ -50,7 +53,8 @@ auditMiddleware.use(
             admin: adminOid ? String(adminOid) : null,
             messenger: messengerOid ? String(messengerOid) : null,
             user: userOid ? String(userOid) : null,
-            action: sanitizeRequestPath(`${req.baseUrl}${req.path}`),
+            action,
+            route,
             ...(logHttpFull ? { body, headers } : {}),
           },
           'auditRequest',

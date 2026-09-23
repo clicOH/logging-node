@@ -7,11 +7,13 @@ import {
   cleanLogData,
   getMaxEventLength,
   getMaxStringLength,
+  getRequestPathFields,
   limitLogEvent,
   redactSensitiveData,
   safeSerialize,
   safeStringify,
   sanitizeRequestPath,
+  stripQueryString,
   truncateString,
 } from './log-data';
 import {
@@ -36,6 +38,7 @@ export {
   cleanLogData,
   getMaxEventLength,
   getMaxStringLength,
+  getRequestPathFields,
   handlerError,
   hideSensitiveData,
   limitLogEvent,
@@ -49,6 +52,7 @@ export {
   safeSerialize,
   safeStringify,
   sanitizeRequestPath,
+  stripQueryString,
   truncateString,
 };
 

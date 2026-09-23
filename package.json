@@ -1,6 +1,6 @@
 {
   "name": "@clicoh/logging",
-  "version": "1.0.1",
+  "version": "1.1.0",
   "description": "Structured JSON logging for ClicOH Node.js Express services",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
